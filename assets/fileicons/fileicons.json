@@ -1,0 +1,34 @@
+{
+    "git": {
+        "fileName": "git.svg",
+        "supportedExt": [
+            "/.git"
+        ]
+    },
+    "image": {
+        "fileName": "image.svg",
+        "supportedExt": [
+            "jpeg",
+            "png"
+        ]
+    },
+    "json": {
+        "fileName": "json.svg",
+        "supportedExt": [
+            "json",
+            "props"
+        ]
+    },
+    "python": {
+        "fileName": "python.svg",
+        "supportedExt": [
+            "py"
+        ]
+    },
+    "svg": {
+        "fileName": "svg.svg",
+        "supportedExt": [
+            "svg"
+        ]
+    }
+}
