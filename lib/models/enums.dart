@@ -10,7 +10,7 @@ enum AppUpdate {
 
 extension AppUpdateExt on AppUpdate {
   get text {
-    switch (uiStore.appUpdate) {
+    switch (uiController.appUpdate.value) {
       case AppUpdate.AVAILABLE:
         return 'Update';
         break;
@@ -29,7 +29,7 @@ extension AppUpdateExt on AppUpdate {
   }
 
   void action() {
-    switch (uiStore.appUpdate) {
+    switch (uiController.appUpdate.value) {
       case AppUpdate.AVAILABLE:
         {
           // InAppUpdate.performImmediateUpdate().then((value) =>
@@ -37,15 +37,15 @@ extension AppUpdateExt on AppUpdate {
           //TODO: Switch to startFlexibleUpdate() when below issue is Fixed.
           //https://github.com/feilfeilundfeil/flutter_in_app_update/issues/42
           InAppUpdate.startFlexibleUpdate().then((value) =>
-              uiStore.updateInAppUpdateAvailable(AppUpdate.DOWNLOADED));
-          uiStore.updateInAppUpdateAvailable(AppUpdate.DOWNLOADING);
+              uiController.updateInAppUpdateAvailable(AppUpdate.DOWNLOADED));
+          uiController.updateInAppUpdateAvailable(AppUpdate.DOWNLOADING);
         }
         break;
       case AppUpdate.DOWNLOADED:
         {
           InAppUpdate.completeFlexibleUpdate().then((value) =>
-              uiStore.updateInAppUpdateAvailable(AppUpdate.NOT_AVAILABLE));
-          uiStore.updateInAppUpdateAvailable(AppUpdate.INSTALLING);
+              uiController.updateInAppUpdateAvailable(AppUpdate.NOT_AVAILABLE));
+          uiController.updateInAppUpdateAvailable(AppUpdate.INSTALLING);
         }
         break;
       default:
@@ -111,16 +111,16 @@ extension AppRouteExt on AppRoute {
   }
 
   void onClick() {
-    switch (uiStore.currentAppRoute) {
+    switch (uiController.currentAppRoute.value) {
       case AppRoute.Home:
-        uiStore.updateCurrentAppRoute(AppRoute.AboutPage);
+        uiController.updateCurrentAppRoute(AppRoute.AboutPage);
         // uiStore.updateCurrentAppRoute(AppRoute.Settings);
         break;
       case AppRoute.AboutPage:
       case AppRoute.Settings:
       case AppRoute.LogPage:
       case AppRoute.ZeroBrowser:
-        uiStore.updateCurrentAppRoute(AppRoute.Home);
+        uiController.updateCurrentAppRoute(AppRoute.Home);
         break;
       case AppRoute.ProjectViewPage:
         projectViewController.closeProject();
@@ -128,6 +128,14 @@ extension AppRouteExt on AppRoute {
       default:
     }
   }
+}
+
+enum ObservableEvent {
+  none,
+  downloding,
+  downloaded,
+  installing,
+  installed,
 }
 
 enum AppTheme {

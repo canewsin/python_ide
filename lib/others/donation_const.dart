@@ -26,12 +26,12 @@ Future getInAppPurchases() async {
     var onetimePurchases = (offerings.current.availablePackages.where(
       (element) => element.identifier.contains('zeronet_one'),
     )).toList();
-    purchasesStore.addOneTimePuchases(onetimePurchases);
+    purchasesController.addOneTimePuchases(onetimePurchases);
 
     var subscriptions = (offerings.current.availablePackages.where(
       (element) => element.identifier.contains('zeronet_sub'),
     )).toList();
-    purchasesStore.addSubscriptions(subscriptions);
+    purchasesController.addSubscriptions(subscriptions);
   }
 }
 
@@ -74,12 +74,11 @@ void listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
       // showPendingUI();
     } else {
       if (purchaseDetails.status == PurchaseStatus.error) {
-        scaffoldState.showSnackBar(
-          SnackBar(
-            content: Text(
-              //!TODO Improve Error Messages sp that user can understand easily.
-              'PurchaseStatus.error :: ${purchaseDetails.error.message}',
-            ),
+        Get.showSnackbar(
+          GetBar(
+            message:
+                //!TODO Improve Error Messages sp that user can understand easily.
+                'PurchaseStatus.error :: ${purchaseDetails.error.message}',
           ),
         );
       } else if (purchaseDetails.status == PurchaseStatus.purchased) {
@@ -95,7 +94,7 @@ void listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
       if (purchaseDetails.productID != null &&
           purchaseDetails.productID.contains('zeronet_one')) {
         await InAppPurchaseConnection.instance.consumePurchase(purchaseDetails);
-        purchasesStore.addConsumedPurchases(purchaseDetails.purchaseID);
+        purchasesController.addConsumedPurchases(purchaseDetails.purchaseID);
       }
       if (purchaseDetails.pendingCompletePurchase) {
         await InAppPurchaseConnection.instance
@@ -113,6 +112,6 @@ _verifyPurchase(PurchaseDetails purchaseDetails) {
 void deliverProduct(PurchaseDetails purchaseDetails) async {
   // IMPORTANT!! Always verify a purchase purchase details before delivering the product.
   if (purchaseDetails.productID.contains('zeronet_one')) {
-    purchasesStore.addPurchases(purchaseDetails.purchaseID);
+    purchasesController.addPurchases(purchaseDetails.purchaseID);
   } else {}
 }

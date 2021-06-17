@@ -1,4 +1,5 @@
 import '../imports.dart';
+import '../imports_conflicts.dart';
 
 class ZeroNetLogPage extends StatelessWidget {
   @override
@@ -17,8 +18,8 @@ class ZeroNetLogPage extends StatelessWidget {
               Container(
                 height: MediaQuery.of(context).size.height * 0.83,
                 child: SingleChildScrollView(
-                  child: Observer(
-                    builder: (_) => Text(varStore.zeroNetLog),
+                  child: Obx(
+                    () => Text(varController.zeroNetLog.value),
                   ),
                 ),
               ),

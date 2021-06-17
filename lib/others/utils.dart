@@ -93,11 +93,11 @@ bindDownloadIsolate() {
       progressA = (progressA + downloadStatusMap[key]);
     }
     var nooffiles = files(arch).length;
-    varStore.setLoadingPercent(progressA ~/ nooffiles);
+    varController.setLoadingPercent(progressA ~/ nooffiles);
     if ((progressA ~/ nooffiles) == 100) {
       isZeroNetDownloadedm = true;
-      varStore.setLoadingStatus(installing);
-      varStore.setLoadingPercent(0);
+      varController.setLoadingStatus(installing);
+      varController.setLoadingPercent(0);
       check();
     }
   });
@@ -125,8 +125,8 @@ bindUnZipIsolate() {
     int totalFiles = data[2];
     var percent = (currentFile / totalFiles) * 100;
     if (percent.toInt() % 5 == 0) {
-      varStore.setLoadingStatus('Installing $name');
-      varStore.setLoadingPercent(percent.toInt());
+      varController.setLoadingStatus('Installing $name');
+      varController.setLoadingPercent(percent.toInt());
     }
     if (percent == 100) {
       percentUnZip = percentUnZip + 100;
@@ -406,7 +406,7 @@ Future<bool> isZeroNetDownloaded() async {
         isExists = exists;
       }
     }
-    varStore.isZeroNetDownloaded(isExists);
+    varController.isZeroNetDownloaded(isExists);
   }
   return isExists;
 }
@@ -426,7 +426,7 @@ checkForAppUpdates() async {
       AppUpdateInfo info = await InAppUpdate.checkForUpdate();
       if (info.updateAvailability == UpdateAvailability.updateAvailable &&
           info.flexibleUpdateAllowed)
-        uiStore.updateInAppUpdateAvailable(AppUpdate.AVAILABLE);
+        uiController.updateInAppUpdateAvailable(AppUpdate.AVAILABLE);
     }
   }
 }

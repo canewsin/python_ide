@@ -42,7 +42,7 @@ class ProjectViewController extends GetxController {
     currentProject = null;
     processController.clearConsoleLog();
     closeAllFiles();
-    uiStore.updateCurrentAppRoute(AppRoute.Home);
+    uiController.updateCurrentAppRoute(AppRoute.Home);
   }
 }
 

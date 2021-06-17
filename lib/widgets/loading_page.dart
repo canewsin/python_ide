@@ -1,3 +1,4 @@
+import '../imports_conflicts.dart';
 import '../imports.dart';
 
 class Loading extends StatelessWidget {
@@ -10,13 +11,19 @@ class Loading extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(logoPath),
+            Padding(
+              padding: EdgeInsets.only(
+                left: Get.width / 12,
+                right: Get.width / 12,
+              ),
+              child: Image.asset(logoPath),
+            ),
             Padding(
               padding: EdgeInsets.all(24.0),
             ),
-            Observer(
-              builder: (context) {
-                var status = varStore.loadingStatus;
+            Obx(
+              () {
+                var status = varController.loadingStatus.value;
                 return Text(
                   status,
                   style: TextStyle(
@@ -26,8 +33,8 @@ class Loading extends StatelessWidget {
                 );
               },
             ),
-            Observer(builder: (context) {
-              var percent = varStore.loadingPercent;
+            Obx(() {
+              var percent = varController.loadingPercent.value;
               return (percent < 1)
                   ? CircularProgressIndicator()
                   : Text(

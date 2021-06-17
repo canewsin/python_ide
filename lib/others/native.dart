@@ -49,7 +49,7 @@ void handleModuleDownloadStatus() {
       final downloaded = data['downloaded'];
       final total = data['total'];
       double percentage = downloaded / total;
-      varStore.setLoadingPercent(percentage.toInt());
+      varController.setLoadingPercent(percentage.toInt());
     }
     printOut(onData, lineBreaks: 2, isNative: true);
     if (status == 5) check();

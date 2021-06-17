@@ -4,6 +4,8 @@ import 'imports_conflicts.dart';
 //TODO:Remainder: Removed Half baked x86 bins, add them when we support x86 platform
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  variableBox = await Hive.openBox('variableBox');
   await init();
   if (kEnableInAppPurchases) {
     InAppPurchaseConnection.enablePendingPurchases();
@@ -34,27 +36,26 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         resizeToAvoidBottomInset: true,
-        body: Observer(
-          builder: (context) {
-            if (varStore.zeroNetInstalled) {
-              scaffoldState = Scaffold.of(context);
+        body: Obx(
+          () {
+            if (varController.zeroNetInstalled.value) {
               if (firstTime) {
                 SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-                uiStore.updateCurrentAppRoute(AppRoute.Settings);
+                // uiController.updateCurrentAppRoute(AppRoute.Settings);
                 if (!isExecPermitted)
                   makeExecHelper().then(
                     (value) => isExecPermitted = value,
                   );
-                firstTime = false;
+                variableBox.put('firstTime', false);
               }
               projectController.loadExistingProjects();
-              return Observer(
-                builder: (ctx) {
-                  switch (uiStore.currentAppRoute) {
+              return Obx(
+                () {
+                  switch (uiController.currentAppRoute.value) {
                     case AppRoute.AboutPage:
                       return WillPopScope(
                         onWillPop: () {
-                          uiStore.updateCurrentAppRoute(AppRoute.Home);
+                          uiController.updateCurrentAppRoute(AppRoute.Home);
                           return Future.value(false);
                         },
                         child: AboutPage(),
@@ -63,7 +64,7 @@ class MyApp extends StatelessWidget {
                     case AppRoute.ProjectViewPage:
                       return WillPopScope(
                         onWillPop: () {
-                          uiStore.updateCurrentAppRoute(AppRoute.Home);
+                          uiController.updateCurrentAppRoute(AppRoute.Home);
                           projectViewController.closeProject();
                           return Future.value(false);
                         },
@@ -77,7 +78,7 @@ class MyApp extends StatelessWidget {
                     case AppRoute.Settings:
                       return WillPopScope(
                         onWillPop: () {
-                          uiStore.updateCurrentAppRoute(AppRoute.Home);
+                          uiController.updateCurrentAppRoute(AppRoute.Home);
                           return Future.value(false);
                         },
                         child: SettingsPage(),
@@ -86,7 +87,7 @@ class MyApp extends StatelessWidget {
                     case AppRoute.LogPage:
                       return WillPopScope(
                         onWillPop: () {
-                          uiStore.updateCurrentAppRoute(AppRoute.Home);
+                          uiController.updateCurrentAppRoute(AppRoute.Home);
                           return Future.value(false);
                         },
                         child: ZeroNetLogPage(),

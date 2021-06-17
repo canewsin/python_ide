@@ -6,7 +6,7 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        uiStore.updateCurrentAppRoute(AppRoute.Home);
+        uiController.updateCurrentAppRoute(AppRoute.Home);
         return Future.value(false);
       },
       child: Container(
@@ -332,11 +332,11 @@ class GooglePlayInAppPurchases extends StatelessWidget {
               ),
             ),
           ),
-          Observer(builder: (ctx) {
+          Obx(() {
             List<Widget> mChildren = [];
             Map<String, List<Package>> googlePurchasesTypes = {
-              'One Time': purchasesStore.oneTimePurchases,
-              'Monthly Subscriptions': purchasesStore.subscriptions,
+              'One Time': purchasesController.oneTimePurchases,
+              'Monthly Subscriptions': purchasesController.subscriptions,
             };
             for (var item in googlePurchasesTypes.keys) {
               List<Package> purchases = googlePurchasesTypes[item];

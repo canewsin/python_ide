@@ -11,7 +11,7 @@ bool isZeroNetInstalledm = false;
 bool isZeroNetDownloadedm = false;
 bool isDownloadExec = false;
 bool canLaunchUrl = false;
-bool firstTime = false;
+bool firstTime = true;
 bool kIsPlayStoreInstall = false;
 bool kEnableInAppPurchases = !kDebugMode && kIsPlayStoreInstall;
 bool manuallyStoppedZeroNet = false;
@@ -29,7 +29,7 @@ String buildNumber;
 var zeroNetState = state.NONE;
 Client client = Client();
 String arch;
-// String zeroNetUrl = '';
+Box<dynamic> variableBox;
 String appNativeDir = '';
 String zeroNetIPwithPort(String url) =>
     url.replaceAll('http:', '').replaceAll('/', '').replaceAll('s', '');
@@ -37,8 +37,6 @@ String sesionKey = '';
 String browserUrl = 'https://google.com';
 String zeroBrowserTheme = 'light';
 String snackMessage = '';
-
-ScaffoldState scaffoldState;
 
 String downloadLink(String item) =>
     releases + 'Android_Module_Binaries/$item.zip';
@@ -60,6 +58,7 @@ List<String> files(String arch) => [
     ];
 
 init() async {
+  firstTime = variableBox.get('firstTime', defaultValue: true);
   getArch();
   kIsPlayStoreInstall = await isPlayStoreInstall();
   appNativeDir = await getNativeDir();
@@ -68,7 +67,7 @@ init() async {
   appPrivDocsDir = await getApplicationDocumentsDirectory();
   isZeroNetInstalledm = await isZeroNetInstalled();
   if (isZeroNetInstalledm) {
-    varStore.isZeroNetInstalled(isZeroNetInstalledm);
+    varController.isZeroNetInstalled(isZeroNetInstalledm);
     checkForAppUpdates();
     projectController.loadCodeTemplates();
     projectController.loadFileIcons();
@@ -90,13 +89,13 @@ check() async {
   if (!isZeroNetInstalledm) {
     if (isZeroNetDownloadedm) {
       if (isZeroNetInstalledm) {
-        varStore.setLoadingStatus('ZeroNet Installed');
-        varStore.isZeroNetInstalled(isZeroNetInstalledm);
+        varController.setLoadingStatus('ZeroNet Installed');
+        varController.isZeroNetInstalled(isZeroNetInstalledm);
         printOut('isZeroNetInstalledm');
       } else {
         isZeroNetInstalled().then((onValue) async {
           isZeroNetInstalledm = onValue;
-          varStore.isZeroNetInstalled(onValue);
+          varController.isZeroNetInstalled(onValue);
           if (!isZeroNetInstalledm) {
             if (!unZipIsolateBound) bindUnZipIsolate();
             unZipinBg();
@@ -108,9 +107,9 @@ check() async {
       if (!isZeroNetInstalledm) {
         isZeroNetDownloadedm = await isZeroNetDownloaded();
         if (isZeroNetDownloadedm) {
-          varStore.isZeroNetDownloaded(true);
+          varController.isZeroNetDownloaded(true);
         } else {
-          varStore.setLoadingStatus(downloading);
+          varController.setLoadingStatus(downloading);
           if (!isDownloadExec) {
             if (await isModuleInstallSupported() &&
                 kEnableDynamicModules &&
@@ -134,8 +133,8 @@ check() async {
                     isNative: true,
                   );
                   isZeroNetDownloadedm = true;
-                  varStore.setLoadingStatus(installing);
-                  varStore.setLoadingPercent(0);
+                  varController.setLoadingStatus(installing);
+                  varController.setLoadingPercent(0);
                   check();
                 }
               } else {
@@ -153,7 +152,7 @@ check() async {
           }
         }
       } else {
-        varStore.isZeroNetInstalled(true);
+        varController.isZeroNetInstalled(true);
       }
     }
   }

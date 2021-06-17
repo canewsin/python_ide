@@ -54,8 +54,8 @@ class HomePage extends StatelessWidget {
 class InAppUpdateWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Observer(builder: (context) {
-      if (uiStore.appUpdate != AppUpdate.NOT_AVAILABLE)
+    return Obx(() {
+      if (uiController.appUpdate.value != AppUpdate.NOT_AVAILABLE)
         return Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -68,15 +68,15 @@ class InAppUpdateWidget extends StatelessWidget {
               ),
             ),
             RaisedButton(
-              onPressed: uiStore.appUpdate.action,
+              onPressed: uiController.appUpdate.value.action,
               color: Color(0xFF008297),
               padding: EdgeInsets.only(left: 10, right: 10),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
               ),
-              child: Observer(builder: (context) {
+              child: Obx(() {
                 return Text(
-                  uiStore.appUpdate.text,
+                  uiController.appUpdate.value.text,
                   style: GoogleFonts.roboto(
                     fontSize: 20.0,
                     fontWeight: FontWeight.w500,
@@ -96,7 +96,7 @@ class AboutButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
-      onPressed: () => uiStore.updateCurrentAppRoute(AppRoute.AboutPage),
+      onPressed: () => uiController.updateCurrentAppRoute(AppRoute.AboutPage),
       color: Color(0xFFAA5297),
       padding: EdgeInsets.only(top: 10, bottom: 10, left: 30, right: 30),
       shape: RoundedRectangleBorder(
@@ -376,7 +376,7 @@ class ProjectsView extends StatelessWidget {
                           }
                         : () {
                             projectViewController.currentProject = project;
-                            uiStore.updateCurrentAppRoute(
+                            uiController.updateCurrentAppRoute(
                               AppRoute.ProjectViewPage,
                             );
                           },
@@ -518,7 +518,7 @@ class ProjectsView extends StatelessWidget {
                                                             projectViewController
                                                                     .currentProject =
                                                                 project;
-                                                            uiStore
+                                                            uiController
                                                                 .updateCurrentAppRoute(
                                                               AppRoute
                                                                   .ProjectViewPage,
