@@ -131,64 +131,67 @@ class DonationWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(4.0),
         ),
-        LayoutBuilder(
-          builder: (ctx, cons) {
-            List<Widget> children = [];
-            for (var crypto in donationsAddressMap.keys) {
-              children.add(
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      crypto,
-                      style: GoogleFonts.roboto(
-                        fontSize: 16.0,
+        if (kEnableCryptoPurchases)
+          LayoutBuilder(
+            builder: (ctx, cons) {
+              List<Widget> children = [];
+              for (var crypto in donationsAddressMap.keys) {
+                children.add(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        crypto,
+                        style: GoogleFonts.roboto(
+                          fontSize: 16.0,
+                        ),
                       ),
-                    ),
-                    ClickableTextWidget(
-                      text: donationsAddressMap[crypto],
-                      textStyle: GoogleFonts.roboto(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w500,
-                        height: 1.5,
-                        color: Color(0xFF8663FF),
-                        decoration: TextDecoration.underline,
-                      ),
-                      onClick: () {
-                        FlutterClipboard.copy(donationsAddressMap[crypto]);
-                        Scaffold.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              '$crypto Donation Address Copied to Clipboard',
+                      ClickableTextWidget(
+                        text: donationsAddressMap[crypto],
+                        textStyle: GoogleFonts.roboto(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w500,
+                          height: 1.5,
+                          color: Color(0xFF8663FF),
+                          decoration: TextDecoration.underline,
+                        ),
+                        onClick: () {
+                          FlutterClipboard.copy(donationsAddressMap[crypto]);
+                          Scaffold.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                '$crypto Donation Address Copied to Clipboard',
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(6.0),
-                    )
-                  ],
-                ),
+                          );
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(6.0),
+                      )
+                    ],
+                  ),
+                );
+              }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: children,
               );
-            }
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: children,
-            );
-          },
-        ),
-        Flexible(
-          child: Text(
-            clickAddToCopy,
-            style: GoogleFonts.roboto(
-              fontSize: 16.0,
+            },
+          ),
+        if (kEnableCryptoPurchases)
+          Flexible(
+            child: Text(
+              clickAddToCopy,
+              style: GoogleFonts.roboto(
+                fontSize: 16.0,
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-        ),
+        if (kEnableCryptoPurchases)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+          ),
         if (kEnableInAppPurchases) GooglePlayInAppPurchases(),
         Padding(
           padding: const EdgeInsets.all(8.0),

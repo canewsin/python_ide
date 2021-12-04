@@ -14,6 +14,7 @@ bool canLaunchUrl = false;
 bool firstTime = true;
 bool kIsPlayStoreInstall = false;
 bool kEnableInAppPurchases = !kDebugMode && kIsPlayStoreInstall;
+bool kEnableCryptoPurchases = !kDebugMode && kIsPlayStoreInstall;
 bool manuallyStoppedZeroNet = false;
 bool zeroNetStartedFromBoot = true;
 bool isExecPermitted = false;
