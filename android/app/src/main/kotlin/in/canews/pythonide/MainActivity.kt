@@ -194,7 +194,7 @@ class MainActivity : FlutterActivity() {
             success(msg)
         }.onFailure {
             if (it is IllegalStateException) {
-                Log.e("MainActivity>resultSuc>", it.message)
+                Log.e("MainActivity>resultSuc>", it.message!!)
             }
         }
     }
