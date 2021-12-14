@@ -15,8 +15,8 @@ const String rawGithubLink = 'https://raw.githubusercontent.com';
 const String canewsInRepo = '/canewsin/ZeroNet';
 const String releases = '$githubLink$canewsInRepo/releases/download/';
 const String md5hashLink = '$rawGithubLink$canewsInRepo/py3-patches/md5.hashes';
-const String zeroNetNotiId = 'zeroNetNetiId';
-const String zeroNetChannelName = 'ZeroNet Mobile';
+const String zeroNetNotiId = 'pythonIdeiId';
+const String zeroNetChannelName = 'Python3 IDE Mobile';
 const String zeroNetChannelDes =
     'Shows ZeroNet Notification to Persist from closing.';
 const String notificationCategory = 'ZERONET_RUNNING';

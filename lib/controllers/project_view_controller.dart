@@ -5,10 +5,18 @@ class ProjectViewController extends GetxController {
   var openedFiles = <ProjectFile>[].obs;
   var currentFile = ProjectFile().obs;
   Project currentProject;
+  var currentProjectFiles = <ProjectFile>[].obs;
+  var createFileNameText = ''.obs;
+
+  void addCurrentProject(ProjectFile file) {
+    if (!currentProjectFiles.contains(file)) {
+      currentProjectFiles.add(file);
+    }
+  }
 
   void openFile(ProjectFile file) {
     if (!openedFiles.contains(file)) {
-      openedFiles.add(file);
+      openedFiles.insert(0, file);
       changeCurrentFile(file);
     }
   }
@@ -20,7 +28,11 @@ class ProjectViewController extends GetxController {
 
   void closeFile(ProjectFile file) {
     openedFiles.remove(file);
-    if (openedFiles.isEmpty) changeCurrentFile(ProjectFile());
+    if (openedFiles.isEmpty) {
+      changeCurrentFile(ProjectFile());
+    } else {
+      changeCurrentFile(openedFiles.first);
+    }
   }
 
   void changeCurrentFile(ProjectFile file) {
@@ -42,6 +54,7 @@ class ProjectViewController extends GetxController {
     currentProject = null;
     processController.clearConsoleLog();
     closeAllFiles();
+    currentProjectFiles.clear();
     uiController.updateCurrentAppRoute(AppRoute.Home);
   }
 }

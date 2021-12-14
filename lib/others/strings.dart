@@ -36,6 +36,17 @@ const contributeDescription =
     "other supported crypto currencies to above addresses or "
     "buy in-app purchases, if want to contribute translations or "
     "code, visit official GitHub repo.";
+const contributeZeroNet = "What is ZeroNet?";
+const contributeZeroNetDescription =
+    "ZeroNet is a decentralized peer-to-peer network, "
+    "where anyone can publish free websites without any hosting costs."
+    // "If you want to support project's further development, "
+    // "you can contribute your time or money, "
+    // "If you want to contribute money you can send bitcoin or "
+    // "other supported crypto currencies to above addresses or "
+    // "buy in-app purchases, if want to contribute translations or "
+    // "code, visit official GitHub repo."
+    ;
 const clickAddToCopy = "* Click on Address to copy";
 const developers = 'Developers';
 const donationAddressTitle = 'Donation Addresses';

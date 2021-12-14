@@ -100,6 +100,22 @@ class AboutPage extends StatelessWidget {
                         fontSize: 18.0,
                       ),
                     ),
+                    Text(
+                      contributeZeroNet,
+                      style: GoogleFonts.roboto(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                    ),
+                    Text(
+                      contributeZeroNetDescription,
+                      style: GoogleFonts.roboto(
+                        fontSize: 18.0,
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                     ),

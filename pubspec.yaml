@@ -26,6 +26,7 @@ dependencies:
   in_app_purchase: ^0.5.2
   in_app_review: ^2.0.2
   in_app_update: ^2.0.0
+  keyboard_attachable: ^2.1.0
   outline_material_icons: 0.1.1
   equatable: ^2.0.2
   package_info: ^2.0.2

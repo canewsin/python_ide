@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         body: Obx(
           () {
             if (varController.zeroNetInstalled.value) {
@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
                           projectViewController.closeProject();
                           return Future.value(false);
                         },
-                        child: ProjectViewPage(),
+                        child: KeyboardAttachablePage(),
                       );
                       break;
                     case AppRoute.Home:

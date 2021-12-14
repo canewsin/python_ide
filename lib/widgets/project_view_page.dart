@@ -1,3 +1,5 @@
+import 'package:keyboard_attachable/keyboard_attachable.dart';
+
 import '../imports.dart';
 import '../imports_conflicts.dart';
 
@@ -22,27 +24,30 @@ class ProjectViewPage extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(bottom: 10),
                       ),
-                      Obx(() {
-                        var openedFiles = projectViewController.openedFiles;
-                        var length = openedFiles.length;
-                        return Container(
+                      // Obx(() {
+                      //   var openedFiles = projectViewController.openedFiles;
+                      //   var length = openedFiles.length;
+                      //   return
+                      Container(
                           width: Get.width,
                           height: 40.0,
-                          child: ListView.builder(
-                            physics: BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: openedFiles.isEmpty ? 1 : length,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (ctx, i) {
-                              if (openedFiles.isEmpty)
-                                return ProjectFileTabView();
-                              return ProjectFileTabView(
-                                projectFile: openedFiles[i],
-                              );
-                            },
+                          child: ProjectFileTabView()
+                          // ListView.builder(
+                          //   physics: BouncingScrollPhysics(),
+                          //   shrinkWrap: true,
+                          //   itemCount: openedFiles.isEmpty ? 1 : length,
+                          //   scrollDirection: Axis.horizontal,
+                          //   itemBuilder: (ctx, i) {
+                          //     // if (openedFiles.isEmpty)
+                          //     return ProjectFileTabView();
+                          //     // return ProjectFileTabView(
+                          //     //   projectFile: openedFiles[i],
+                          //     // );
+                          //   },
+                          // ),
+                          //   );
+                          // }
                           ),
-                        );
-                      }),
                       Obx(() {
                         var currentFile =
                             projectViewController.currentFile.value;
@@ -181,44 +186,203 @@ class ConsoleLogWidget extends StatelessWidget {
   }
 }
 
+final createFileController = TextEditingController();
+var errorFileExists = false;
+
 class ProjectFileTabView extends StatelessWidget {
-  final ProjectFile projectFile;
   const ProjectFileTabView({
     Key key,
-    this.projectFile,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(right: 1.0),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade300,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(8.0),
-          topRight: Radius.circular(16.0),
-        ),
-      ),
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 16.0,
-              right: 0.0,
+    return ListView(
+      scrollDirection: Axis.horizontal,
+      children: [
+        InkWell(
+          onTap: () => projectViewController.changeCurrentFile(ProjectFile()),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8.0),
+                topRight: Radius.circular(16.0),
+              ),
+              border: Border.all(
+                color: Colors.grey.shade500,
+                width: 1.0,
+              ),
             ),
-            child: Text(
-              projectFile == null ? 'Project Files' : projectFile.name,
-              textAlign: TextAlign.center,
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 16.0,
+                    right: 0.0,
+                  ),
+                  child: Text(
+                    'Project Files',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.close),
+                ),
+              ],
             ),
           ),
-          IconButton(
-            onPressed: () {
-              projectViewController.closeFile(projectFile);
-            },
-            icon: Icon(Icons.close),
-          )
-        ],
-      ),
+        ),
+        Obx(
+          () {
+            var openedFiles = projectViewController.openedFiles;
+            var children = <Widget>[];
+            if (openedFiles.isNotEmpty) {
+              for (var i = 0; i < openedFiles.length; i++) {
+                var child = Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      topRight: Radius.circular(16.0),
+                    ),
+                    border: Border.all(
+                      color: Colors.grey.shade500,
+                      width: 1.0,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 16.0,
+                          right: 0.0,
+                        ),
+                        child: Text(
+                          projectViewController.openedFiles[i].name,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          projectViewController
+                              .closeFile(projectViewController.openedFiles[i]);
+                        },
+                        icon: Icon(Icons.close),
+                      ),
+                    ],
+                  ),
+                );
+                children.add(InkWell(
+                  onTap: () => projectViewController
+                      .changeCurrentFile(projectViewController.openedFiles[i]),
+                  child: child,
+                ));
+              }
+            }
+            return Row(
+              children: children,
+            );
+          },
+        ),
+        Container(
+          margin: const EdgeInsets.only(right: 1.0),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16.0),
+              topRight: Radius.circular(16.0),
+            ),
+            border: Border.all(
+              color: Colors.grey.shade500,
+              width: 1.0,
+            ),
+          ),
+          child: Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (c) {
+                      return Obx(
+                        () {
+                          var files = projectViewController.currentProjectFiles;
+                          print(files.length);
+                          return AlertDialog(
+                            title: Text('Create New File'),
+                            content: Obx(() {
+                              var name =
+                                  projectViewController.createFileNameText;
+                              print(name);
+                              return TextField(
+                                  controller: createFileController,
+                                  decoration: InputDecoration(
+                                    hintText: 'File Name',
+                                    errorText: errorFileExists
+                                        ? 'File Already Exists'
+                                        : null,
+                                  ),
+                                  onChanged: (value) {
+                                    if (value.isNotEmpty) {
+                                      var list = files
+                                          .map((element) => element.name)
+                                          .toList();
+                                      var fileExists = list.contains(value);
+                                      if (fileExists) {
+                                        errorFileExists = true;
+                                      } else {
+                                        errorFileExists = false;
+                                      }
+                                      projectViewController
+                                          .createFileNameText.value = value;
+                                    }
+                                  });
+                            }),
+                            actions: [
+                              FlatButton(
+                                child: Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              FlatButton(
+                                child: Text('Create'),
+                                onPressed: () {
+                                  if (!errorFileExists) {
+                                    var name = projectViewController
+                                        .createFileNameText.value;
+                                    var path = projectViewController
+                                        .currentProject.path;
+                                    var file = File('$path/$name');
+                                    file.createSync();
+                                    projectViewController.currentProjectFiles
+                                        .add(
+                                      ProjectFile(
+                                        name: name,
+                                        path: file.path,
+                                      ),
+                                    );
+                                    projectViewController
+                                        .createFileNameText.value = '';
+                                    createFileController.clear();
+                                    Navigator.pop(context);
+                                  }
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+                icon: Icon(Icons.add),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -241,12 +405,12 @@ class ProjectFileExplorerView extends StatelessWidget {
                   Directory(projectViewController.currentProject.path);
               var filesList = projectDir.listSync();
               for (var item in filesList) {
-                files.add(
-                  ProjectFile(
-                    name: item.name(),
-                    path: item.path,
-                  ),
+                var projectFile = ProjectFile(
+                  name: item.name(),
+                  path: item.path,
                 );
+                files.add(projectFile);
+                projectViewController.addCurrentProject(projectFile);
               }
               return ListView.builder(
                 shrinkWrap: true,
@@ -309,6 +473,8 @@ class ProjectFileExplorerView extends StatelessWidget {
   }
 }
 
+var textEditingController = TextEditingController(text: '');
+
 class ProjectFileView extends StatelessWidget {
   const ProjectFileView({Key key}) : super(key: key);
 
@@ -318,6 +484,7 @@ class ProjectFileView extends StatelessWidget {
       var currentFile = projectViewController.currentFile;
       File f = File(currentFile.value.path);
       var content = f.readAsStringSync();
+      textEditingController.text = content;
       return Stack(
         children: [
           Container(
@@ -330,42 +497,45 @@ class ProjectFileView extends StatelessWidget {
                 : Padding(
                     padding: const EdgeInsets.only(top: 40.0),
                     child: Obx(
-                      () => projectViewController.currentFile.value.isInEditMode
-                          ? Container(
-                              color: Colors.white,
-                              padding: const EdgeInsets.only(
-                                left: 12.0,
-                                top: 4.0,
-                              ),
-                              child: TextFormField(
-                                autofocus: true,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.white,
+                      () {
+                        return projectViewController
+                                .currentFile.value.isInEditMode
+                            ? Container(
+                                color: Colors.white,
+                                padding: const EdgeInsets.only(
+                                  left: 12.0,
+                                  top: 4.0,
                                 ),
-                                initialValue: content,
-                                minLines: 150,
-                                maxLines: 150,
-                                onChanged: (txt) {
-                                  projectFileController.currentFileText.value =
-                                      txt;
-                                },
-                                style: TextStyle(
+                                child: TextFormField(
+                                  controller: textEditingController,
+                                  autofocus: true,
+                                  decoration: InputDecoration(
+                                    fillColor: Colors.white,
+                                  ),
+                                  minLines: 150,
+                                  maxLines: 150,
+                                  onChanged: (txt) {
+                                    projectFileController
+                                        .currentFileText.value = txt;
+                                  },
+                                  style: TextStyle(
+                                    fontFamily: 'LucidaSansDemiBold',
+                                    fontSize: 16,
+                                    height: 1.0,
+                                  ),
+                                ),
+                              )
+                            : HighlightView(
+                                content,
+                                language: 'python',
+                                theme: githubTheme,
+                                padding: EdgeInsets.all(12),
+                                textStyle: TextStyle(
                                   fontFamily: 'LucidaSansDemiBold',
                                   fontSize: 16,
-                                  height: 1.0,
                                 ),
-                              ),
-                            )
-                          : HighlightView(
-                              content,
-                              language: 'python',
-                              theme: githubTheme,
-                              padding: EdgeInsets.all(12),
-                              textStyle: TextStyle(
-                                fontFamily: 'LucidaSansDemiBold',
-                                fontSize: 16,
-                              ),
-                            ),
+                              );
+                      },
                     ),
                   ),
           ),
@@ -414,4 +584,119 @@ class ProjectFileView extends StatelessWidget {
       );
     });
   }
+}
+
+class KeyboardAttachablePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          top: false,
+          maintainBottomViewPadding: true,
+          child: Obx(
+            () => FooterLayout(
+              footer: projectViewController.currentFile.value.isInEditMode
+                  ? KeyboardAttachableFooter()
+                  : null,
+              child: ProjectViewPage(),
+            ),
+          ),
+        ),
+      );
+}
+
+/// Builds a footer that animates its bottom space when the keyboard is shown.
+class KeyboardAttachableFooter extends StatelessWidget {
+  final symbols = [
+    'Tab',
+    ':',
+    '=',
+    '.',
+    ',',
+    '(',
+    ')',
+    '"',
+    "'",
+    '+',
+    '-',
+    '*',
+    '/',
+    '%',
+    '^',
+    '~',
+    '|'
+  ];
+
+  final pairs = {
+    "'": {'pair': "'", "move": false},
+    '"': {'pair': '"', "move": false},
+    "(": {'pair': ")", "move": false},
+    "{": {'pair': "}", "move": false},
+    ":": {'pair': "\n    ", "move": true},
+  };
+  @override
+  Widget build(BuildContext context) => KeyboardAttachable(
+        child: Container(
+          height: 36.0,
+          width: Get.width,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: symbols.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (ctx, i) {
+              return InkWell(
+                onTap: () {
+                  var sel = TextSelection.fromPosition(
+                    TextPosition(
+                      offset: textEditingController.selection.extentOffset,
+                    ),
+                  );
+                  print(sel.baseOffset);
+                  var text = textEditingController.text;
+                  var symbolOrg = (symbols[i] == 'Tab' ? '    ' : symbols[i]);
+                  var symbol = (symbols[i] == 'Tab' ? '    ' : symbols[i]);
+                  if (pairs.keys.contains(symbols[i])) {
+                    symbol += pairs[symbols[i]]['pair'];
+                    if (pairs[symbols[i]]['move']) {
+                      symbolOrg = symbol;
+                    }
+                  }
+                  textEditingController.text =
+                      text.substring(0, sel.baseOffset) +
+                          symbol +
+                          text.substring(sel.baseOffset);
+                  textEditingController.selection = TextSelection.fromPosition(
+                    TextPosition(
+                      offset: sel.baseOffset + symbolOrg.length,
+                    ),
+                  );
+                  projectFileController.currentFileText.value =
+                      textEditingController.text;
+                },
+                child: Container(
+                  constraints: BoxConstraints(
+                    minWidth: Get.width * 0.18,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey.shade300,
+                      width: 4.0,
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      symbols[i],
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontFamily: 'LucidaSansDemiBold',
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ).paddingOnly(left: 18.0, right: 18.0),
+      );
 }

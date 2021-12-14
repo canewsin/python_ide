@@ -638,7 +638,7 @@ class ContributionWidget extends StatelessWidget {
           ),
           Text(
             "This Python Runner is Used by Our ZeroNet Mobile App, Which is also Open sourced. "
-            "We are encouraging you to test your python knowledge here and contribute to this project. "
+            "We are encouraging you to test your python knowledge our project and contribute to ZeroNet. "
             "You can also convert your python app to Android App by using our Python Runner. See our Github Repo for more details.",
             style: TextStyle(
               fontSize: 18.0,

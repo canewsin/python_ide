@@ -14,7 +14,7 @@ bool canLaunchUrl = false;
 bool firstTime = true;
 bool kIsPlayStoreInstall = false;
 bool kEnableInAppPurchases = !kDebugMode && kIsPlayStoreInstall;
-bool kEnableCryptoPurchases = !kDebugMode && kIsPlayStoreInstall;
+bool kEnableCryptoPurchases = false;
 bool manuallyStoppedZeroNet = false;
 bool zeroNetStartedFromBoot = true;
 bool isExecPermitted = false;
@@ -43,7 +43,6 @@ String downloadLink(String item) =>
     releases + 'Android_Module_Binaries/$item.zip';
 
 bool isUsrBinExists() => Directory(dataDir + '/usr').existsSync();
-bool isZeroNetExists() => Directory(dataDir + '/ZeroNet-py3').existsSync();
 String downloadingMetaDir(String tempDir, String name, String key) =>
     Directory(tempDir + '/meta/$name.$key.downloading').path;
 String downloadedMetaDir(String tempDir, String name) =>
