@@ -41,6 +41,10 @@ class HomePage extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(bottom: 15),
                   ),
+                  ContributionWidget(),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 15),
+                  ),
                 ],
               ),
             ),
@@ -147,9 +151,27 @@ class RatingButtonWidget extends StatelessWidget {
 final TextEditingController _pathController = TextEditingController(
   text: 'Projects/',
 );
+final TextEditingController _nameController = TextEditingController(
+  text: '',
+);
 
 class ProjectsView extends StatelessWidget {
   const ProjectsView({Key key}) : super(key: key);
+
+  void handleProjectNameChange(String text) {
+    var name = _nameController.text;
+    if (projectController.isProjectExists(name)) {
+      projectController.errorCreatingProject.value = true;
+    } else {
+      projectController.errorCreatingProject.value = false;
+    }
+
+    if (!projectController.errorCreatingProject.value) {
+      projectController.createdNewProjectName.value = text;
+      projectController.createdNewProjectPath.value = 'Projects/' + text;
+      _pathController.text = projectController.createdNewProjectPath.value;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -219,24 +241,24 @@ class ProjectsView extends StatelessWidget {
                                               Spacer(),
                                               Container(
                                                 width: Get.width * 0.72,
-                                                child: TextFormField(
-                                                  style: TextStyle(
-                                                    fontSize: 18.0,
-                                                  ),
-                                                  onChanged: (text) {
-                                                    projectController
-                                                        .createdNewProjectName
-                                                        .value = text;
-                                                    projectController
-                                                            .createdNewProjectPath
-                                                            .value =
-                                                        'Projects/' + text;
-                                                    _pathController.text =
-                                                        projectController
-                                                            .createdNewProjectPath
-                                                            .value;
-                                                  },
-                                                ),
+                                                child: Obx(() {
+                                                  return TextFormField(
+                                                    decoration: InputDecoration(
+                                                      labelText: 'Project Name',
+                                                      errorText: projectController
+                                                              .errorCreatingProject
+                                                              .value
+                                                          ? 'Project with this name already exists'
+                                                          : null,
+                                                    ),
+                                                    style: TextStyle(
+                                                      fontSize: 18.0,
+                                                    ),
+                                                    controller: _nameController,
+                                                    onChanged:
+                                                        handleProjectNameChange,
+                                                  );
+                                                }),
                                               ),
                                             ],
                                           ),
@@ -579,6 +601,51 @@ class ProjectsView extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class ContributionWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: Get.width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Text(
+            "Contribute",
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            "Hello Guys, Thanks for Installing this App. This App is Opensourced and we are looking for contributions. "
+            "This App is developed with Flutter(Dart Lang) Framework, if you are intersted in contributing code, please use github link in about page.",
+            style: TextStyle(
+              fontSize: 18.0,
+            ),
+          ).paddingOnly(left: 8.0, top: 16.0, bottom: 16.0),
+          Text(
+            "Want to Test your Python Knowledge?",
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            "This Python Runner is Used by Our ZeroNet Mobile App, Which is also Open sourced. "
+            "We are encouraging you to test your python knowledge here and contribute to this project. "
+            "You can also convert your python app to Android App by using our Python Runner. See our Github Repo for more details.",
+            style: TextStyle(
+              fontSize: 18.0,
+            ),
+          ).paddingOnly(left: 8.0, top: 16.0),
+        ],
+      ),
     );
   }
 }

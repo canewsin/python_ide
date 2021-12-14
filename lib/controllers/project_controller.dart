@@ -58,6 +58,19 @@ class ProjectController extends GetxController {
     return project;
   }
 
+  var errorCreatingProject = false.obs;
+
+  bool isProjectExists(String name) {
+    if (name != null) {
+      return projects
+              .where(
+                  (p) => p.name?.toLowerCase() == name?.toLowerCase()?.trim())
+              .length >
+          0;
+    }
+    return false;
+  }
+
   void addProjectToList(Project project) {
     if (projects.where((p) => p.id == project.id).isEmpty)
       projects.add(project);
