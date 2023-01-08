@@ -1,7 +1,7 @@
 # Python IDE Mobile - IDE for Python 3
 <!-- [![Codemagic build status](https://api.codemagic.io/apps/5f755f0647fecf7a4f25751a/5f75609747fecf958ea171b0/status_badge.svg)](https://codemagic.io/apps/5f755f0647fecf7a4f25751a/5f75609747fecf958ea171b0/latest_build) -->
 
-Python IDE Mobile is simple yet fully featured Python3 IDE without needing PC Setup for your python 3 projects.
+Python IDE Mobile is a simple yet fully featured Python3 IDE without needing PC Setup for your python 3 projects.
 
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" 
       alt="Download from Google Play" 
