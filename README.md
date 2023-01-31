@@ -38,16 +38,19 @@ keyPassword=KEY_PASSWORD
 In the root folder:
 
 - to build an APK
+
 ```
 flutter build apk --no-shrink
 ```
 
 - to build an appbundle
+
 ```
 flutter build appbundle --no-shrink
 ```
 
 - to run the app on an Android Device / Emulator
+
 ```
 flutter run
 ```
